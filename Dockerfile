@@ -1,4 +1,15 @@
-FROM alpine:3.12@sha256:4716d67546215299bf023fd80cc9d7e67f4bdc006a360727fd0b0b44512c45db
+FROM alpine:3.12@sha256:a15790640a6690aa1730c38cf0a440e2aa44aaca9b0e8931a9f2b0d7cc90fd65
+
+ENV HUGO_VERSION=0.76.3
+ENV HUGO_TYPE=_extended
+ENV HUGO_ID=hugo${HUGO_TYPE}_${HUGO_VERSION}
+
+RUN wget -O - https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/${HUGO_ID}_Linux-64bit.tar.gz | tar -xz -C /tmp \
+    && mkdir -p /usr/local/sbin \
+    && mv /tmp/hugo /usr/local/sbin/hugo \
+    && rm -rf /tmp/${HUGO_ID}_linux_amd64 \
+    && rm -rf /tmp/LICENSE.md \
+    && rm -rf /tmp/README.md
 
 RUN apk add --update \
     git \
@@ -7,19 +18,6 @@ RUN apk add --update \
     libstdc++ \
     openssl \
     ca-certificates \
-    wget \
-    && update-ca-certificates \
-    && mkdir /working
-
-WORKDIR /working
-
-ENV HUGO_VERSION=0.76.3
-ENV HUGO_TYPE=_extended
-ENV HUGO_ID=hugo${HUGO_TYPE}_${HUGO_VERSION}
-ENV HUGO=/usr/local/sbin/hugo
-RUN wget https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/${HUGO_ID}_Linux-64bit.tar.gz \
-    && tar -xzf *.tar.gz \
-    && rm *.tar.gz \
-    && mv hugo /usr/bin
+    wget
 
 CMD [ "/bin/sh" ]
