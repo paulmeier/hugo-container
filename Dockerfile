@@ -7,18 +7,19 @@ RUN apk add --update \
     libstdc++ \
     openssl \
     ca-certificates \
-    wget &&\
-    update-ca-certificates
+    wget \
+    && update-ca-certificates \
+    && mkdir /working
+
+WORKDIR /working
 
 ENV HUGO_VERSION=0.76.3
 ENV HUGO_TYPE=_extended
 ENV HUGO_ID=hugo${HUGO_TYPE}_${HUGO_VERSION}
 ENV HUGO=/usr/local/sbin/hugo
-RUN wget -O - https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/${HUGO_ID}_Linux-64bit.tar.gz | tar -xz -C /tmp \
-    && mkdir -p /usr/local/sbin \
-    && mv /tmp/hugo /usr/local/sbin/hugo \
-    && rm -rf /tmp/${HUGO_ID}_linux_amd64 \
-    && rm -rf /tmp/LICENSE.md \
-    && rm -rf /tmp/README.md
+RUN wget https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/${HUGO_ID}_Linux-64bit.tar.gz \
+    && tar -xzf *.tar.gz \
+    && rm *.tar.gz \
+    && mv hugo /usr/bin
 
 CMD [ "/bin/sh" ]
