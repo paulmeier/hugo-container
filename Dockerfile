@@ -21,6 +21,4 @@ RUN wget -O - https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION
     && rm -rf /tmp/LICENSE.md \
     && rm -rf /tmp/README.md
 
-ENTRYPOINT [ "docker-entrypoint.sh" ]
-
 CMD [ "/bin/sh" ]
